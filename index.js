@@ -2,19 +2,13 @@
 const fetch = require('node-fetch');
 const commandLineArgs = require('command-line-args');
 const getUsage = require('command-line-usage');
+const imessage = require('osa-imessage');
 
 // Get partNumbers from json file.
 const partNumbers = require('./partNumbers.json');
 
 // Define command line args accepted.
 const optionDefinitions = [
-  {
-    name: 'carrier',
-    type: String,
-    defaultValue: 'TMOBILE',
-    description:
-      "Define which carrier to search for.  Accepted options are: 'ATT', 'SPRING', 'TMOBILE', 'VERIZON'.",
-  },
   {
     name: 'model',
     type: String,
@@ -25,7 +19,7 @@ const optionDefinitions = [
   {
     name: 'color',
     type: String,
-    defaultValue: 'gray',
+    defaultValue: 'silver',
     description:
       "Define which color iPhone to search for.  Accepted options are: 'silver', 'gray'.",
   },
@@ -72,7 +66,7 @@ const usageDefinition = [
       {
         desc: 'Default arguments.',
         example:
-          '$ node index.js [bold]{--carrier} TMOBILE [bold]{--model} x [bold]{--color} gray [bold]{--storage} 256 [bold]{--delay} 30 [bold]{--distance} 60',
+          '$ node index.js [bold]{--model} x [bold]{--color} silver [bold]{--storage} 256 [bold]{--delay} 30',
       },
       {
         desc: 'Simple example',
@@ -99,10 +93,10 @@ if (options.help || options.zip === undefined) {
 
 // Get part number for the specified device.
 const partNumber =
-  partNumbers[options.model][options.carrier.toUpperCase()][options.color][options.storage];
+  partNumbers[options.model][options.color][options.storage];
 
 // Construct the endpoint url with the options selected.
-const endpoint = `https://www.apple.com/shop/retail/pickup-message?pl=true&cppart=${options.carrier}/US&parts.0=${partNumber}&location=${options.zip}`;
+const endpoint = `https://www.apple.com/fr/shop/retail/pickup-message?pl=true/FR&parts.0=${partNumber}&location=${options.zip}`;
 
 // Keep track of the last request time.
 let lastRequestTimestamp = null;
@@ -121,7 +115,7 @@ function updateStatus() {
   // Get the amount of time elapsed since last request.
   const timeDelta = Date.now() - lastRequestTimestamp;
   const timeInSeconds = Math.floor(timeDelta / 1000);
-  process.stdout.write(`Status: Device not available. Last request made ${timeInSeconds} seconds ago\r`);
+  process.stdout.write(`Statut: iPhone X n'est pas disponible. Dernière requête faite il y a ${timeInSeconds} secondes\r`);
 }
 
 /**
@@ -131,10 +125,10 @@ function updateStatus() {
  * @return {Array} The array of stores where the devices is available.
  */
 function processResponse(data) {
-  // Destructure the stores object out of the body.
-  const { stores } = data.body;
+    // Destructure the stores object out of the body.
+    const { stores } = data.body;
 
-  // Filter out stores that do not have the device available.
+    // Filter out stores that do not have the device available.
   const storesAvailable = stores.filter((store) => {
     // Check if store is within distance.
     if (store.storedistance < options.distance) {
@@ -147,10 +141,10 @@ function processResponse(data) {
     }
     // Store wasn't within distance so return false.
     return false;
-  });
+    });
 
-  // Return an array of stores where the device is available.
-  return storesAvailable;
+    // Return an array of stores where the device is available.
+    return storesAvailable;
 }
 
 /**
@@ -177,7 +171,7 @@ function displayStoresAvailable(storesAvailable) {
   // Construct the output string by reducing the storesAvailable array into a string.
   const storesAvailableStr = storesAvailable.reduce(
     (result, store) =>
-      `${result}\n${store.address.address} which is ${store.storeDistanceWithUnit} away`,
+      `${result}\n${store.address.address} situé  à ${store.storeDistanceWithUnit}`,
     '',
   );
 
@@ -185,8 +179,9 @@ function displayStoresAvailable(storesAvailable) {
   console.log('\u0007');
 
   // Output the message.
-  console.log(`The device is currently available at ${storesAvailable.length} stores near you:`);
+  console.log(`L'iPhone X est disponible à ${storesAvailable.length} autour de vous:`);
   console.log(storesAvailableStr);
+  imessage.send('+33600112233', `iPhone X disponible ! Rdv ${storesAvailableStr}`);
 }
 
 /**
@@ -212,7 +207,7 @@ async function requestLoop() {
 }
 
 // Display program started message.
-console.log('Starting program with the following settings:');
+console.log('Démarrage du programme avec la configuration suivante:');
 console.log(`${JSON.stringify(options, null, 2)}`);
 
 // Update the display every second.

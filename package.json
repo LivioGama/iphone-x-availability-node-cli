@@ -12,7 +12,8 @@
   "dependencies": {
     "command-line-args": "^4.0.7",
     "command-line-usage": "^4.0.1",
-    "node-fetch": "^1.7.3"
+    "node-fetch": "^1.7.3",
+    "osa-imessage": "^2.3.0"
   },
   "devDependencies": {
     "eslint": "^4.10.0",

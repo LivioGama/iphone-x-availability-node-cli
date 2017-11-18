@@ -1,4 +1,4 @@
-# iPhone X Availability Node CLI
+# iPhone X Availability Node CLI for France territory
 
 A node cli tool I put together to check the iPhone X in-store availability near me instead of having to refresh the apple website over and over again.
 
@@ -18,19 +18,19 @@ It continously makes requests to Apple's availability api. When it finds some ne
 
 1. Clone this repository `git clone https://github.com/carlosesilva/iphone-x-availability-node-cli.git`
 1. Go into the directory `cd iphone-x-availability-node-cli`
-1. Instal dependencies `npm install`
+1. Install dependencies `npm install`
 1. Run the program `node index.js --zip=12345`
 
 ### Examples
 
-Check availability for TMOBILE iPhone X 256gb in space gray every 30 seconds within 60 miles of the zip code 12345 (pretty much the default settings so we don't need to specify them here, the zip code is always required though)
+Check availability for iPhone X 256gb in silver gray every 30 seconds near the zip code 12345 (pretty much the default settings so we don't need to specify them here, the zip code is always required though)
 ```
 node index.js --zip=012345
 ```
 
-Check availability for ATT iPhone X 64gb in silver every minute within 30 miles of the zip code 02115
+Check availability for iPhone X 64gb in silver every minute near the zip code 75002
 ```
-node index.js --carrier=ATT --color=silver --storage=64 --delay=60 --zip=02115 --distance=30
+node index.js --color=silver --storage=64 --delay=60 --zip=75002
 ```
 
 Use the --help flag for more information
@@ -41,12 +41,11 @@ node index.js --help
 ### Options
 | option   | accepted values                               | default                               |
 | -------- | --------------------------------------------- | ------------------------------------- |
-| carrier  | `'ATT'`, `'SPRINT'`, `'TMOBILE'`, `'VERIZON'` | `'TMOBILE'`                           |
 | model    | `'x'`                                         | `'x'`                                 |
 | color    | `'silver'`, `'gray'`                          | `'gray'`                              |
 | storage  | `64`, `256`                                   | `256`                                 |
 | delay    | Integer number of seconds between requests    | `30`                                  |
 | distance | Integer number of miles from zipcode to look  | `60`                                  |
-| zip*     | 5 digit US zip code                           | Not provided, you must enter your own |
+| zip*     | 5 digit FR zip code                           | Not provided, you must enter your own |
 
 *\*required*
